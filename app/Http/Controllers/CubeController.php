@@ -34,10 +34,22 @@ class CubeController extends Controller
      */
     public function queries(QueryCube $request)
     {
-        $result = $this->facade->queries($request->get('text'));
+        $result = $this->facade->queries($request->input('text'));
 
         return redirect()->route('cube.index')
             ->with(['result' => $result])
             ->withInput();
+    }
+
+    /**
+     * @param QueryCube $request
+     * @return $this
+     */
+    public function json(QueryCube $request)
+    {
+        return response()->json([
+            'success' => true,
+            'result'  => $this->facade->queries($request->input('text'))
+        ]);
     }
 }

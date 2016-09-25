@@ -100,10 +100,13 @@ class QueriesCubeValidation
      * @param $string
      * @return bool
      */
-    protected function isUpdateLine($string)
+    protected function isUpdateLine($string, $max)
     {
         if($line = $this->getQueryType($string, "UPDATE", 5)) {
-            return ($line[1] > 0 && $line[2] > 0 && $line[3] > 0);
+            return ($line[1] > 0 && $line[1] <= $max &&
+                    $line[2] > 0 && $line[2] <= $max &&
+                    $line[3] > 0 && $line[3] <= $max
+            );
         }
 
         return false;
@@ -111,13 +114,14 @@ class QueriesCubeValidation
 
     /**
      * @param $string
+     * @param $max
      * @return bool
      */
-    protected function isQueryLine($string)
+    protected function isQueryLine($string, $max)
     {
         if($line = $this->getQueryType($string, "QUERY", 7)) {
-            return ($this->isNumberRange($line[1], 1, $line[4]) && $this->isNumberRange($line[2], 1, $line[5])
-                && $this->isNumberRange($line[3], 1, $line[6]));
+            return ($this->isNumberRange($line[1], 1, $line[4]) && $this->isNumberRange($line[2], 1, $line[5]) && $this->isNumberRange($line[3], 1, $line[6]) &&
+                $this->isNumberRange($line[4], $line[1], $max) && $this->isNumberRange($line[5], $line[2], $max) && $this->isNumberRange($line[6], $line[3], $max));
         }
 
         return false;
@@ -181,7 +185,7 @@ class QueriesCubeValidation
                         if ($key > 1) {
                             $this->error["line"] = $key + 1;
                             if ($countQuery <= $configTestCase["numberQueries"]) {
-                                if (!$this->isUpdateLine($line) && !$this->isQueryLine($line)) {
+                                if (!$this->isUpdateLine($line, $configTestCase['dimensions']) && !$this->isQueryLine($line, $configTestCase['dimensions'])) {
                                     $this->setQueryLineError();
                                     break;
                                 }
