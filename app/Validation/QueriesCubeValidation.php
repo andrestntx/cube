@@ -147,6 +147,13 @@ class QueriesCubeValidation
         $this->error["text"] = \Lang::get("validation.cube.max-tests");
     }
 
+    protected function setSyntaxError($line)
+    {
+        $this->result = false;
+        $this->error["line"] = $line;
+        $this->error["text"] = \Lang::get("validation.cube.syntax");
+    }
+
     protected function setTestCaseIncompleteError()
     {
         $this->result = false;
@@ -164,41 +171,46 @@ class QueriesCubeValidation
     public function validate($attribute, $value, $parameters, $validator)
     {
         $lines = $this->getLines($value);
+        \Log::info($lines);
         $countTest = 1;
         $countQuery = 1;
 
-        if($numberTestCases = $this->isNumberRange($lines[0], 1, 50)) {
-            if ($configTestCase = $this->getConfigTestCase($lines[1])) {
-                foreach($lines as $key => $line) {
-                    if($key > 1) {
-                        $this->error["line"] = $key + 1;
-                        if($countQuery <= $configTestCase["numberQueries"]) {
-                            if (! $this->isUpdateLine($line) && ! $this->isQueryLine($line)) {
-                                $this->setQueryLineError();
+        if(count($lines) >= 3 ) {
+            if ($numberTestCases = $this->isNumberRange($lines[0], 1, 50)) {
+                if ($configTestCase = $this->getConfigTestCase($lines[1])) {
+                    foreach ($lines as $key => $line) {
+                        if ($key > 1) {
+                            $this->error["line"] = $key + 1;
+                            if ($countQuery <= $configTestCase["numberQueries"]) {
+                                if (!$this->isUpdateLine($line) && !$this->isQueryLine($line)) {
+                                    $this->setQueryLineError();
+                                    break;
+                                }
+                                $countQuery++;
+                            } else if ($countTest >= $numberTestCases) {
+                                $this->setMaxTestsError();
+                                break;
+                            } else if ($configTestCase = $this->getConfigTestCase($line)) {
+                                $countTest++;
+                                $countQuery = 1;
+                            } else {
+                                $this->setConfigTestCaseError();
                                 break;
                             }
-                            $countQuery++;
-                        } else if($countTest >= $numberTestCases) {
-                            $this->setMaxTestsError();
-                            break;
-                        } else if($configTestCase = $this->getConfigTestCase($line)) {
-                            $countTest++;
-                            $countQuery = 1;
-                        }
-                        else {
-                            $this->setConfigTestCaseError();
-                            break;
                         }
                     }
-                }
-                if($this->result && $countQuery <= $configTestCase["numberQueries"]) {
-                    $this->setTestCaseIncompleteError();
+                    if ($this->result && $countQuery <= $configTestCase["numberQueries"]) {
+                        $this->setTestCaseIncompleteError();
+                    }
+                } else {
+                    $this->setConfigTestCaseError();
                 }
             } else {
-                $this->setConfigTestCaseError();
+                $this->setFirstLineError();
             }
-        } else {
-            $this->setFirstLineError();
+        }
+        else {
+            $this->setSyntaxError(count($lines));
         }
 
         if(! $this->result) {

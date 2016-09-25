@@ -121,6 +121,7 @@ return [
         'config-test-case'  => 'The value must have 2 integer numbers',
         'query-line'        => 'Incorrect query',
         'max-tests'         => 'Number of test exceeded',
-        'tests-case-incomplete' => 'Incomplete test'
+        'tests-case-incomplete' => 'Incomplete test',
+        'syntax'            => 'Syntax error'
     ]
 ];
