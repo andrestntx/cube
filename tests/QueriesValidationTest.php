@@ -15,22 +15,6 @@ class QueriesValidationTest extends TestCase
             ->dontSee('Result');
     }
 
-    public function testIncompleteError()
-    {
-        $this->visitRoute('cube.index')
-            ->type("2\n2 2", 'text')
-            ->press('Send')
-            ->dontSee('Result');
-    }
-
-    public function testBasicSuccess()
-    {
-        $this->visitRoute('cube.index')
-            ->type("2\n2 1\nUPDATE 1 1 1 4", 'text')
-            ->press('Send')
-            ->see('Result');
-    }
-
     public function testErrorUpdate()
     {
         $this->visitRoute('cube.index')
@@ -46,6 +30,31 @@ class QueriesValidationTest extends TestCase
             ->press('Send')
             ->dontSee('Result');
     }
+
+    public function testIncompleteError()
+    {
+        $this->visitRoute('cube.index')
+            ->type("2\n2 2", 'text')
+            ->press('Send')
+            ->dontSee('Result');
+    }
+
+    public function testIncompleteTestError()
+    {
+        $this->visitRoute('cube.index')
+            ->type("2\n2 2\nUPDATE 1 1 1 4", 'text')
+            ->press('Send')
+            ->dontSee('Result');
+    }
+
+    public function testBasicSuccess()
+    {
+        $this->visitRoute('cube.index')
+            ->type("2\n2 1\nUPDATE 1 1 1 4", 'text')
+            ->press('Send')
+            ->see('Result');
+    }
+
 
     public function testFullSuccess()
     {
