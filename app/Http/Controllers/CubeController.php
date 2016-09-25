@@ -18,6 +18,8 @@ class CubeController extends Controller
 
     public function queries(QueryCube $request)
     {
-        return view('cube.index')->with(['result' => 'resultado']);
+        return redirect()->route('cube.index')
+            ->with(['result' => 'result'])
+            ->withInput();
     }
 }

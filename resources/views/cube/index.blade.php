@@ -15,10 +15,10 @@
 					<button type="submit" value="Send" class="btn btn-block btn-primary">Send</button>
 				{!! Form::close() !!}
 			</div>
-			@if(isset($result))
+			@if(session('result'))
 				<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2">
-					<h2>Resultado</h2>
-					<p>{{ $result }}</p>
+					<h2>Result</h2>
+					<p>{{ session('result') }}</p>
 				</div>
 			@endif
 		</div>

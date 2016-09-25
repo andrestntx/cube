@@ -118,7 +118,7 @@ return [
 
     'cube' => [
         'first-line'        => 'The value must be integer, between 1 and 50',
-        'config-test-case'  => 'The value must be 2 integer values',
+        'config-test-case'  => 'The value must have 2 integer numbers',
         'query-line'        => 'Incorrect query',
         'max-tests'         => 'Number of test exceeded',
         'tests-case-incomplete' => 'Incomplete test'
