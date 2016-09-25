@@ -170,9 +170,8 @@ class QueriesCubeValidation
      */
     public function validate($attribute, $value, $parameters, $validator)
     {
-        $lines = $this->getLines($value);
-        \Log::info($lines);
-        $countTest = 1;
+        $lines      = $this->getLines($value);
+        $countTest  = 1;
         $countQuery = 1;
 
         if(count($lines) >= 3 ) {
@@ -199,7 +198,7 @@ class QueriesCubeValidation
                             }
                         }
                     }
-                    if ($this->result && $countQuery <= $configTestCase["numberQueries"]) {
+                    if ($this->result && ($countQuery <= $configTestCase["numberQueries"] || $countTest < $numberTestCases)) {
                         $this->setTestCaseIncompleteError();
                     }
                 } else {

@@ -9,18 +9,27 @@
 		<div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
 			<h1 class="text-center">Cube Summation</h1>	
 
-			<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2">
-				{!! Form::open(['route' => 'cube.queries']) !!}
-					{!! Field::textarea('text') !!}
-					<button type="submit" value="Send" class="btn btn-block btn-primary">Send</button>
-				{!! Form::close() !!}
-			</div>
-			@if(session('result'))
-				<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2">
-					<h2>Result</h2>
-					<p>{{ session('result') }}</p>
+			<div class="row" style="margin-top: 40px;">
+				<div class="col-sm-6 col-sm-offset-2">
+					{!! Form::open(['route' => 'cube.queries']) !!}
+						{!! Field::textarea('text', ['tpl' => 'themes.bootstrap.fields.simple']) !!}
+						<button type="submit" value="Send" class="btn btn-block btn-primary">Send</button>
+					{!! Form::close() !!}
 				</div>
-			@endif
+				<div class="col-sm-2 bg-info">
+					<h4>Result</h4>
+					@if(session('result'))
+						<div class="col-xs-12">
+							<h5>Test OK:</h5>
+							@foreach(session('result') as $test)
+								@foreach($test as $output)
+									<p>{{ $output }}</p>
+								@endforeach
+							@endforeach
+						</div>
+					@endif
+				</div>	
+			</div>
 		</div>
 		
 		<script src="/assets/bootstrap/js/jquery-3.1.1.min.js"></script>

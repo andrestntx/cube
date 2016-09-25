@@ -122,6 +122,7 @@ return [
         'config-test-case'  => 'El valor debe tener 2 números enteros',
         'query-line'        => 'Consulta incorrecta',
         'max-tests'         => 'Cantidad de pruebas incorrectas',
-        'tests-case-incomplete' => 'Prueba incompleta'
+        'tests-case-incomplete' => 'Prueba incompleta',
+        'syntax'            => 'Error de sintaxis'
     ]
 ];
